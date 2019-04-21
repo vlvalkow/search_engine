@@ -2,9 +2,8 @@ from search_tool.search_engine.database import Document
 
 
 class SearchEngine:
-    def __init__(self, crawler, database_, indexer, filesystem):
+    def __init__(self, crawler, indexer, filesystem):
         self.crawler = crawler
-        self.database = database_
         self.indexer = indexer
         self.filesystem = filesystem
         self.inverted_index = {}
@@ -12,7 +11,7 @@ class SearchEngine:
     def build_inverted_index(self):
         inverted_index = {}
 
-        document_database = Document(self.database)
+        document_database = Document()
 
         self.crawler.crawl(document_database)
 
@@ -21,10 +20,13 @@ class SearchEngine:
 
             inverted_index = self.indexer.generate_index(document_entry['id'], texts)
 
+        # Save to the filesystem
         self.filesystem.save('inverted_index.json', inverted_index)
         self.filesystem.save('database.json', document_database.all())
 
-        return inverted_index
+        # Clear out of memory
+        del inverted_index
+        del document_database
 
     def load_inverted_index(self):
         self.inverted_index = self.filesystem.get('inverted_index.json')
@@ -40,11 +42,11 @@ class SearchEngine:
         return inverted_index
 
     def find_documents(self, term):
-        document = Document(self.database)
+        document_database = Document()
 
         inverted_index = self.get_inverted_index_for_term(term)
 
-        documents = document.where_in('id', inverted_index)
+        documents = document_database.where_in('id', inverted_index)
 
         # for document in documents:
         #     document.update({

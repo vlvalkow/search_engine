@@ -1,21 +1,25 @@
-class Database:
-    def __init__(self):
-        self.entries = []
+from search_tool.search_engine.filesystem import Filesystem
 
 
 class Model:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        self.filesystem = Filesystem()
+        self.entries = []
+
+        data = self.filesystem.get('database.json')
+
+        if data:
+            self.entries = data
 
     def get(self, id_):
-        for entry in self.database.entries:
+        for entry in self.entries:
             if entry['id'] == id_:
                 return entry
 
     def where_in(self, key, haystack):
         entries = []
 
-        for entry in self.database.entries:
+        for entry in self.entries:
             for appearance in haystack:
                 if entry[key] == appearance['document_id']:
                     entries.append(entry)
@@ -23,13 +27,13 @@ class Model:
         return entries
 
     def save(self, entry):
-        entry['id'] = len(self.database.entries) + 1
-        self.database.entries.append(entry)
+        entry['id'] = len(self.entries) + 1
+        self.entries.append(entry)
 
     def all(self):
-        return self.database.entries
+        return self.entries
 
 
 class Document(Model):
-    def __init__(self, database):
-        Model.__init__(self, database)
+    def __init__(self):
+        Model.__init__(self)

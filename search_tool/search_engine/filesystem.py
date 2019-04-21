@@ -9,4 +9,9 @@ class Filesystem:
         pass
 
     def get(self, file_path):
+        file = Path(file_path)
+
+        if not file.is_file():
+            return False
+
         return json.loads(Path(file_path).read_text())

@@ -7,7 +7,7 @@ from search_tool.search_engine.crawler.queue import Queue
 from search_tool.search_engine.crawler.downloader import Downloader
 from search_tool.search_engine.crawler.parser import Parser
 from search_tool.search_engine.crawler.scheduler import Scheduler
-from search_tool.search_engine.database import Database, Document, Model
+from search_tool.search_engine.database import Document, Model
 from search_tool.search_engine.indexer import Indexer, Appearance
 from search_tool.search_engine.filesystem import Filesystem
 
@@ -34,13 +34,14 @@ class TestSearchEngine(unittest.TestCase):
                 Parser(),
                 Scheduler()
             ),
-            Database(),
             Indexer(),
             Filesystem(),
         )
 
     def test_can_build_inverted_index(self):
-        inverted_index = self.search_engine.build_inverted_index()
+        self.search_engine.build_inverted_index()
+
+        inverted_index = self.search_engine.filesystem.get('inverted_index.json')
 
         """
         The following assertions assume an inverted index structure:
@@ -64,7 +65,7 @@ class TestCrawler(unittest.TestCase):
         )
 
     def test_can_crawl(self):
-        page = Document(Database())
+        page = Document()
 
         self.crawler.crawl(page)
 
@@ -116,17 +117,12 @@ class TestScheduler:
     pass
 
 
-class TestDatabase:
-    pass
-
-
 class TestModel(unittest.TestCase):
     def setUp(self):
-        self.database = Database()
-        self.model = Model(self.database)
+        self.model = Model()
 
     def test_where_in(self):
-        self.database.entries = [{'id': 1}, {'id': 2}]
+        self.model.entries = [{'id': 1}, {'id': 2}]
         inverted_index_for_term = [
             Appearance(1, 1).__dict__,
             Appearance(2, 1).__dict__,
