@@ -51,6 +51,8 @@ class Crawler:
             # Limit the number of documents to crawl
             # if len(document.all()) == 1:
             #     self.queue.empty()
+            
+            print('Crawled: ' + str(len(document.all())) + ' documents so far...')
 
     def has_crawled(self, url, document):
         for stored_document in document.all():
