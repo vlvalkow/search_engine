@@ -3,3 +3,4 @@
 .coverage
 htmlcov
 inverted_index.json
+database.json

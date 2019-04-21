@@ -12,17 +12,17 @@ class SearchEngine:
     def build_inverted_index(self):
         inverted_index = {}
 
-        document = Document(self.database)
+        document_database = Document(self.database)
 
-        self.crawler.crawl(document)
+        self.crawler.crawl(document_database)
 
-        for document in document.all():
-            texts = self.crawler.parser.extract_visible_text(document)
+        for document_entry in document_database.all():
+            texts = self.crawler.parser.extract_visible_text(document_entry)
 
-            # TODO: Save to the filesystem in chunks to prevent running out of memory
-            inverted_index = self.indexer.generate_index(document['id'], texts)
+            inverted_index = self.indexer.generate_index(document_entry['id'], texts)
 
         self.filesystem.save('inverted_index.json', inverted_index)
+        self.filesystem.save('database.json', document_database.all())
 
         return inverted_index
 

@@ -38,7 +38,7 @@ class Crawler:
             document.save({
                 'title': self.parser.get_document_title(download.content),
                 'url': current_url,
-                'content': download.content
+                'content': download.content.decode('utf-8')
             })
 
             urls = self.parser.parse(self.seed, download.content)
