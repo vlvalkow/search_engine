@@ -26,7 +26,6 @@ class SearchEngine:
 
         # Clear out of memory
         del inverted_index
-        del document_database
 
     def load_inverted_index(self):
         self.inverted_index = self.filesystem.get('inverted_index.json')

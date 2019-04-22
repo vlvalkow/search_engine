@@ -26,11 +26,13 @@ class Indexer:
         return self.index
 
     def update_existing_term(self, term, document_id):
-        for appearance in self.index[term]:
-            if appearance['document_id'] == document_id:
-                appearance['frequency'] += 1
-            else:
-                self.index[term].append(Appearance(document_id, 1).__dict__)
+        appearance = next((appearance for appearance in self.index[term] if appearance["document_id"] == document_id),
+                          None)
+
+        if appearance:
+            appearance['frequency'] += 1
+        else:
+            self.index[term].append(Appearance(document_id, 1).__dict__)
 
     def add_new_term(self, term, document_id):
         self.index[term] = [Appearance(document_id, 1).__dict__]

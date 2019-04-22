@@ -30,6 +30,8 @@ class Model:
         entry['id'] = len(self.entries) + 1
         self.entries.append(entry)
 
+        return entry
+
     def all(self):
         return self.entries
 
