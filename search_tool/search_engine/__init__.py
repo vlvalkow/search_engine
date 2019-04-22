@@ -24,9 +24,6 @@ class SearchEngine:
         self.filesystem.save('inverted_index.json', inverted_index)
         self.filesystem.save('database.json', document_database.all())
 
-        # Clear out of memory
-        del inverted_index
-
     def load_inverted_index(self):
         self.inverted_index = self.filesystem.get('inverted_index.json')
 
