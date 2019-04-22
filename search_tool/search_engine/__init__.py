@@ -31,7 +31,7 @@ class SearchEngine:
         self.inverted_index = self.filesystem.get('inverted_index.json')
 
     def get_inverted_index_for_term(self, term):
-        inverted_index = []
+        inverted_index = {}
 
         if term not in self.inverted_index:
             return inverted_index
