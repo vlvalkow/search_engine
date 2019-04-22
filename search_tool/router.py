@@ -14,8 +14,8 @@ class Router:
 
         # Import parameter_bags module
         parameter_bags_module = importlib.import_module(
-            '...parameter_bags',
-            package='search_tool.search_engine.parameter_bags'
+            '..parameter_bags',
+            package='search_tool.search_engine'
         )
 
         # Get parameter bag and make it callable
@@ -32,7 +32,7 @@ class Router:
 
     def route(self, action, search_engine):
         # Import controller module
-        controllers_module = importlib.import_module('...controller', package='search_tool.search_engine.controller')
+        controllers_module = importlib.import_module('..controller', package='search_tool.search_engine')
 
         # Load Controller class
         controller_class = getattr(controllers_module, 'Controller')
