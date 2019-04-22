@@ -1,0 +1,8 @@
+.git
+.idea
+.coverage
+htmlcov
+exclude-file.txt
+__pycache__
+*.pyc
+.gitignore
