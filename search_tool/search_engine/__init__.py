@@ -2,10 +2,11 @@ from search_tool.search_engine.database import Document
 
 
 class SearchEngine:
-    def __init__(self, crawler, indexer, filesystem):
+    def __init__(self, crawler, indexer, filesystem, query_processor):
         self.crawler = crawler
         self.indexer = indexer
         self.filesystem = filesystem
+        self.query_processor = query_processor
         self.inverted_index = {}
 
     def build_inverted_index(self):
@@ -37,12 +38,21 @@ class SearchEngine:
 
         return inverted_index
 
-    def find_documents(self, term):
+    def find_documents(self, query):
+        documents = []
         document_database = Document()
+        terms = self.query_processor.process(query)
 
-        inverted_index = self.get_inverted_index_for_term(term)
+        matches = []
+        for term in terms:
+            if term not in self.inverted_index:
+                return documents
 
-        documents = document_database.where_in('id', inverted_index)
+            matches.append(set([appearance['document_id'] for appearance in self.inverted_index[term]]))
+
+        document_ids = set.intersection(*matches)
+
+        documents = document_database.where_in('id', document_ids)
 
         # for document in documents:
         #     document.update({

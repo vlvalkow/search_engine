@@ -20,8 +20,8 @@ class Model:
         entries = []
 
         for entry in self.entries:
-            for appearance in haystack:
-                if entry[key] == appearance['document_id']:
+            for item in haystack:
+                if entry[key] == item:
                     entries.append(entry)
 
         return entries

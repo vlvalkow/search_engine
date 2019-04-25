@@ -10,6 +10,7 @@ from search_tool.search_engine.crawler.scheduler import Scheduler
 from search_tool.search_engine.database import Document, Model
 from search_tool.search_engine.indexer import Indexer, Appearance
 from search_tool.search_engine.filesystem import Filesystem
+from search_tool.search_engine.query_processor import QueryProcessor
 
 
 class TestSearchTool(unittest.TestCase):
@@ -36,10 +37,20 @@ class TestSearchEngine(unittest.TestCase):
             ),
             Indexer(),
             Filesystem(),
+            QueryProcessor()
         )
 
     def test_can_build_inverted_index(self):
         pass
+
+    def test_find_pages_with_two_terms(self):
+        self.search_engine.load_inverted_index()
+
+        query = 'Area Bulgaria'
+
+        documents = self.search_engine.find_documents(query)
+
+        self.assertGreater(len(documents), 0)
 
 
 class TestCrawler(unittest.TestCase):
@@ -111,14 +122,9 @@ class TestModel(unittest.TestCase):
 
     def test_where_in(self):
         self.model.entries = [{'id': 1}, {'id': 2}]
-        inverted_index_for_term = [
-            Appearance(1, 1).__dict__,
-            Appearance(2, 1).__dict__,
-            Appearance(3, 1).__dict__,
-            Appearance(5, 1).__dict__
-        ]
+        document_ids = [1, 2]
 
-        models = self.model.where_in('id', inverted_index_for_term)
+        models = self.model.where_in('id', document_ids)
 
         self.assertEqual(2, len(models))
 
@@ -174,6 +180,22 @@ class TestIndexer(unittest.TestCase):
         for appearance in self.indexer.index['the crazy']:
             self.assertEqual(1, appearance['document_id'])
             self.assertEqual(1, appearance['frequency'])
+
+
+class TestQueryProcessor(unittest.TestCase):
+    def setUp(self):
+        self.query_processor = QueryProcessor()
+
+    def test_process_single_word(self):
+        query = 'Northern Mariana Islands'
+        terms = self.query_processor.process(query)
+
+        self.assertEqual('Northern', terms[0])
+
+    def test_process_multi_word(self):
+        query = '"Northern Mariana Islands"'
+        terms = self.query_processor.process(query)
+        self.assertEqual('Northern Mariana Islands', terms[0])
 
 
 if __name__ == '__main__':

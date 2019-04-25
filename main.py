@@ -8,6 +8,7 @@ from search_tool.search_engine.crawler.parser import Parser
 from search_tool.search_engine.crawler.scheduler import Scheduler
 from search_tool.search_engine.indexer import Indexer
 from search_tool.search_engine.filesystem import Filesystem
+from search_tool.search_engine.query_processor import QueryProcessor
 
 if __name__ == '__main__':
     search_tool = SearchTool(
@@ -21,7 +22,8 @@ if __name__ == '__main__':
                 Scheduler()
             ),
             Indexer(),
-            Filesystem()
+            Filesystem(),
+            QueryProcessor()
         ),
     )
 
