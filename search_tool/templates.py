@@ -17,7 +17,7 @@ class FindTemplate:
     def render(self, documents, term):
         response = \
             '==================================================\n' \
-            ' Search results for term "' + term + '": \n' \
+            ' Found ' + str(len(documents)) + ' results for query ' + term + ': \n' \
             '==================================================\n' \
             '\n'
 
