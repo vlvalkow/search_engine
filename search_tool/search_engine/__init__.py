@@ -53,10 +53,5 @@ class SearchEngine:
         document_ids = set.intersection(*matches)
 
         documents = document_database.where_in('id', document_ids)
-
-        # for document in documents:
-        #     document.update({
-        #         'excerpt': self.crawler.parser.get_excerpt_for_term(document['content'], term)
-        #     })
-
+        
         return documents
