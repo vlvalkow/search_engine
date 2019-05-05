@@ -53,7 +53,3 @@ class Appearance:
     def __init__(self, document_id, frequency):
         self.document_id = document_id
         self.frequency = frequency
-
-    # To help with debugging
-    # def __repr__(self):
-    #     return str(self.__dict__)

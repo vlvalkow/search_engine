@@ -45,13 +45,6 @@ class Parser:
 
         return soup.title.string
 
-    # def get_excerpt_for_term(self, html, term):
-    #     soup = BeautifulSoup(html, 'html.parser')
-    #
-    #     excerpt = soup.find(text=term)
-    #
-    #     return excerpt
-
     def extract_visible_text(self, page):
         soup = BeautifulSoup(page['content'], 'html.parser')
 
