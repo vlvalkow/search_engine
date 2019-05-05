@@ -1,6 +1,4 @@
 import unittest
-from search_tool import SearchTool
-from search_tool.router import Router
 from search_tool.search_engine import SearchEngine
 from search_tool.search_engine.crawler import Crawler
 from search_tool.search_engine.crawler.queue import Queue
