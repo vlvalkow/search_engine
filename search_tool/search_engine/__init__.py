@@ -40,7 +40,6 @@ class SearchEngine:
 
     def find_documents(self, query):
         documents = []
-        document_database = Document()
         terms = self.query_processor.process(query)
 
         matches = []
@@ -52,6 +51,32 @@ class SearchEngine:
 
         document_ids = set.intersection(*matches)
 
-        documents = document_database.where_in('id', document_ids)
-        
+        filtered_index = {}
+
+        for term in terms:
+            filtered_index[term] = list(
+                filter(lambda appearance: appearance['document_id'] in document_ids, self.inverted_index[term]))
+
+        return self.rank_documents(terms, filtered_index)
+
+    def rank_documents(self, terms, filtered_index):
+        documents = []
+        document_database = Document()
+        ranks = {}
+        for term in terms:
+            for appearance in filtered_index[term]:
+                if appearance['document_id'] not in ranks:
+                    ranks[appearance['document_id']] = appearance['frequency']
+                else:
+                    ranks[appearance['document_id']] += appearance['frequency']
+
+        for document_id in ranks:
+            document = document_database.get(document_id)
+
+            document['rank'] = ranks[document_id]
+
+            documents.append(document)
+
+        documents = sorted(documents, key=lambda d: d['rank'], reverse=True)
+
         return documents
