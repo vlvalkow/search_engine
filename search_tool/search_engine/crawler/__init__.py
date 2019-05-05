@@ -47,10 +47,6 @@ class Crawler:
                 self.queue.add(url)
 
             self.queue.remove(current_url)
-
-            # Limit the number of documents to crawl
-            # if len(document.all()) == 1:
-            #     self.queue.empty()
             
             print('Crawled: ' + str(len(document.all())) + ' documents so far...')
 
