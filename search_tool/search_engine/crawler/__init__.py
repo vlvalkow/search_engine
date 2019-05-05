@@ -30,7 +30,7 @@ class Crawler:
                 print('Not allowed to crawl ' + current_url)
 
             # Set delay for crawling
-            delay = randint(4, 10)
+            delay = randint(5, 10)
             print('Waiting for ' + str(delay) + ' seconds...')
 
             download = self.scheduler.add_interval_job(lambda: self.downloader.download(current_url), delay)
