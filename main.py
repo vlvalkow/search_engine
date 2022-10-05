@@ -1,3 +1,4 @@
+import sys
 from search_tool import SearchTool
 from search_tool.router import Router
 from search_tool.search_engine import SearchEngine
@@ -11,11 +12,15 @@ from search_tool.search_engine.filesystem import Filesystem
 from search_tool.search_engine.query_processor import QueryProcessor
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Please set a website URL to crawl')
+        sys.exit()
+
     search_tool = SearchTool(
         Router(),
         SearchEngine(
             Crawler(
-                'http://example.webscraping.com',
+                sys.argv[1],
                 Queue(),
                 Downloader(),
                 Parser(),

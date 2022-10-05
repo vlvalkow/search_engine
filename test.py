@@ -1,3 +1,4 @@
+import sys
 import unittest
 from search_tool.search_engine import SearchEngine
 from search_tool.search_engine.crawler import Crawler
@@ -25,9 +26,13 @@ class TestController:
 
 class TestSearchEngine(unittest.TestCase):
     def setUp(self):
+        if len(sys.argv) < 2:
+            print('Please set a website URL to crawl')
+            sys.exit()
+
         self.search_engine = SearchEngine(
             Crawler(
-                'http://example.webscraping.com',
+                sys.argv[1],
                 Queue(),
                 Downloader(),
                 Parser(),
@@ -53,8 +58,12 @@ class TestSearchEngine(unittest.TestCase):
 
 class TestCrawler(unittest.TestCase):
     def setUp(self):
+        if len(sys.argv) < 2:
+            print('Please set a website URL to crawl')
+            sys.exit()
+
         self.crawler = Crawler(
-            'http://example.webscraping.com',
+            sys.argv[1],
             Queue(),
             Downloader(),
             Parser(),
@@ -66,7 +75,7 @@ class TestCrawler(unittest.TestCase):
 
         self.crawler.crawl(page)
 
-        self.assertEqual('http://example.webscraping.com', page.get(1)['url'])
+        self.assertEqual(sys.argv[1], page.get(1)['url'])
 
 
 class TestQueue:
